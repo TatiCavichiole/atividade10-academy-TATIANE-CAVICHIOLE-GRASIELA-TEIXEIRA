@@ -12,14 +12,26 @@ CT001 - Acessar as funcionalidades do App
 
 CT002 - Cadastro de produto com sucesso
     Dado o usuário está na tela cadastro de produtos
-    Quando o usuario preencher os campos para cadastro    001    Tora Maçaranduba    UN    10    100    1545
-    Então o produto deve ser cadastrado com sucesso
+    Quando o usuario preencher os campos para cadastro   001    Tora Maçaranduba    UN    10    100    1545 
+    #Então o produto deve ser cadastrado com sucesso    ${dados_inseridos}
+Cadastro de varios produtos
+    
+    [Template]    Quando o usuario preencher os campos para cadastro
+    FOR    ${counter}    IN RANGE    1
+        001    Tora Maçaranduba         UN    10    100    1545
+        002    Tora Angelin             UN    15    100    1550
+        003    Tora Jatoba              UN    20    100    1555
+        004    Tora Jarana              UN    25    100    1560
+        005    Tora Orelha de Macado    UN    30    100    1565
+
+        
+    END
 
 CT003 - Nao deve ser possivel cadastrar produto sem preencher os campos obrigatorios
     Dado o usuário está na tela cadastro de produtos
-    Quando o usuario nao preencher os campos obrigatorios para cadastro
+    Quando o usuario nao preencher os campos obrigatorios para cadastro    006    35    1570
     Então deve aparecer mensagem informando o campo obrigatorio a ser preenchido
-    E o produto nao deve ser cadastrado
+    #E o produto nao deve ser cadastrado
 
 CT004 - Acrescentar quantidade de produto ao estoque
     Dado o usuário está na tela cadastro de produtos

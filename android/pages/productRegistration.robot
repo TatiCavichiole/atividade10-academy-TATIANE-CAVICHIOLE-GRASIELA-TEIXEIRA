@@ -4,25 +4,22 @@ Resource    ../../base.robot
 
 Library    XML
 
-
 *** Variables ***
-${ANDROID_AUTOMATION_NAME}      UIAutomator2
-${ANDROID_PLATFORM_VERSION}     14
-${APP_PACKAGE}                  br.com.pztec.estoque
-${APP_ACTIVITY}                 .Inicio
-${ANDROID_PLATFORM_NAME}        Android
-
-
+${TELA_INICIAL}                 xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout
+${BARRA_MENU}                   xpath=//android.widget.LinearLayout[@resource-id="br.com.pztec.estoque:id/todoObjeto"]/android.widget.LinearLayout
+${BUTTON_NEW}                   xpath=br.com.pztec.estoque:id/Button1
+${TELA_CADASTRO}                xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout
+${ELEMENTO_PRODUCT}             xpath=//android.widget.LinearLayout[@resource-id="br.com.pztec.estoque:id/cabecObjeto"]/android.widget.LinearLayout
+${TXT_CODIGO}                   xpath=br.com.pztec.estoque:id/txt_codigo
 *** Keywords ***
-Abrir App
-    Open Application
-    ...    http://127.0.0.1:4723
-    ...    automationName=${ANDROID_AUTOMATION_NAME}
-    ...    platformName=${ANDROID_PLATFORM_NAME}
-    ...    platformVersion=${ANDROID_PLATFORM_VERSION}
-    ...    appPackage=${APP_PACKAGE}
-    ...    appActivity=${APP_ACTIVITY}
-
-Teardown
-    Run Keyword If Test Failed    Capture Page Screenshot
-    Close All Applications
+Dado que o usuário está na tela inicial do aplicativo
+    Wait Until Element Is Visible    ${TELA_INICIAL} 
+    Element Should Be Visible    ${BARRA_MENU}
+ Dado o usuário está na tela cadastro de produtos
+    Wait Until Element Is Visible    ${BARRA_MENU} 
+    Espera o elemento e faz o click    ${BUTTON_NEW}
+    Element Should Be Visible    ${TELA_CADASTRO}
+    Page Should Contain Element    ${ELEMENTO_PRODUCT}
+Quando o usuario preencher os campos para cadastro
+    Espera o elemento e faz o click    ${TXT_CODIGO}
+Então o produto deve ser cadastrado com sucesso

@@ -3,6 +3,9 @@ Funcionalidade: Validar a funcionalidade de products
     Desejo acessar as funcionalidades disponíveis
     Para realizar cadastros e consultas
 
+Contexto: Acessar as funcionalidades do App
+        Dado que o usuário está na tela inicial do aplicativo
+
 Cenário: Cadastro de produto com sucesso
     Dado o usuário está na tela cadastro de produtos
     Quando o usuario preencher os campos para cadastro

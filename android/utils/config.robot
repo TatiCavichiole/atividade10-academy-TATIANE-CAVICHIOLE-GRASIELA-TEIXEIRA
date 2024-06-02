@@ -4,10 +4,11 @@ Resource    ../../base.robot
 
 *** Variables ***
 ${ANDROID_AUTOMATION_NAME}      UIAutomator2
-${ANDROID_PLATFORM_VERSION}     14
+${ANDROID_PLATFORM_VERSION}     11
 ${APP_PACKAGE}                  br.com.pztec.estoque
 ${APP_ACTIVITY}                 .Inicio
 ${ANDROID_PLATFORM_NAME}        Android
+
 
 
 *** Keywords ***
@@ -19,6 +20,7 @@ Abrir App
     ...    platformVersion=${ANDROID_PLATFORM_VERSION}
     ...    appPackage=${APP_PACKAGE}
     ...    appActivity=${APP_ACTIVITY}
+    ...    autoGrantPermissions=true
 
 Teardown
     Run Keyword If Test Failed    Capture Page Screenshot

@@ -12,7 +12,7 @@ CT001 - Acessar as funcionalidades do App
 
 CT002 - Cadastro de produto com sucesso
     Dado o usuário está na tela cadastro de produtos
-    Quando o usuario preencher os campos para cadastro
+    Quando o usuario preencher os campos para cadastro    001    Tora Maçaranduba    UN    10    100    1545
     Então o produto deve ser cadastrado com sucesso
 
 CT003 - Nao deve ser possivel cadastrar produto sem preencher os campos obrigatorios

@@ -10,10 +10,11 @@ ${dados_inseridos}
 *** Test Cases ***
 
 CT001 - Acessar as funcionalidades do App
-    Dado que o usuário está na tela inicial do aplicativo
+    Dado que o usuário acessou a tela inicial do aplicativo
 
 CT002 - Cadastro de produto com sucesso
-    Dado o usuário está na tela cadastro de produtos
+    Dado que o usuário acessou a tela inicial do aplicativo
+    E o acessou a tela cadastro de produtos
     Quando o usuario preencher os campos para cadastro   001    Tora Maçaranduba    UN    10    100    1545 
     Então o produto deve ser cadastrado com sucesso      ${dados_inseridos}
 Cadastro de varios produtos
@@ -30,29 +31,27 @@ Cadastro de varios produtos
     END
 
 CT003 - Nao deve ser possivel cadastrar produto sem preencher os campos obrigatorios
-    Dado o usuário está na tela cadastro de produtos
+    Dado que o usuário acessou a tela inicial do aplicativo
+    E o acessou a tela cadastro de produtos
     Quando o usuario nao preencher os campos obrigatorios para cadastro    006    35    1570
     Então o produto nao deve ser cadastrado
     
 
 CT004 - Acrescentar quantidade de produto ao estoque
-    Dado o usuário está na tela cadastro de produtos
-    E que existe um produto com 10 unidades em estoque
+    Dado que existe um produto com 10 unidades em estoque
     Quando acrescentar 5 unidades ao estoque do produto
     Então o estoque do produto deve ser 15 unidades
 
 CT005 - Decrementar quantidade de produto do estoque sem ficar negativo
-    Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" com 10 unidades em estoque
-    Quando decrementar 5 unidades ao estoque do produto "Produto A"
-    Então o estoque do produto "Produto A" deve ser 5 unidades
+    Dado que existe um produto com 10 unidades em estoque
+    Quando decrementar 5 unidades ao estoque do produto
+    Então o estoque do produto deve ser 5 unidades
 
 CT006 - Nao deve ser possivel que o estoque fique negativo
-    Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" com 3 unidades em estoque
-    Quando decrementar 5 unidades ao estoque do produto "Produto A"
+    Dado que existe um produto com 10 unidades em estoque
+    Quando decrementar 11 unidades ao estoque do produto
     Então a operação deve falhar
-    E o estoque do produto "Produto A" deve permanecer 3 unidades
+    Então o estoque do produto deve ser 10 unidades
 
 CT007 - Edição de informaçoes do Lot do produto
     Dado o usuário está na tela cadastro de produtos

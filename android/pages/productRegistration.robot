@@ -27,29 +27,32 @@ ${TXT_ID_PRODUTOS}              id=br.com.pztec.estoque:id/txt_idprod
 ${DADOS_INCOMPLETOS}            xpath=//android.widget.ScrollView[@resource-id="br.com.pztec.estoque:id/scrollView1"]/android.widget.LinearLayout
 ${BUTTON_ADICIONAR}             id=br.com.pztec.estoque:id/entrada
 ${PRODUTO_CADASTRADO}           id=br.com.pztec.estoque:id/linha_parte1
-${ESTOQUE_QUANTIDADE}           id=br.com.pztec.estoque:id/txt_qtdentrada
+${ESTOQUE_ENTRADA}              id=br.com.pztec.estoque:id/txt_qtdentrada
 ${ESTOQUE_MOTIVO}               id=br.com.pztec.estoque:id/txt_motivo
 ${ESTOQUE_REFERENCIA}           id=br.com.pztec.estoque:id/txt_referencia
 ${BUTTON_SAVE_ESTOQUE}          xpath=//android.widget.Button[@resource-id="br.com.pztec.estoque:id/btn_salvar"]
-
+${BUTTON_DECREMENTAR}           id=br.com.pztec.estoque:id/saida
+${TELA_ALTERAR_ESTOQUE}         xpath=//android.widget.ScrollView[@resource-id="br.com.pztec.estoque:id/scrollView1"]/android.widget.LinearLayout
+${ESTOQUE_SAIDA}                id=br.com.pztec.estoque:id/txt_qtdsaida
+${ESTOQUE_MENSAGEM}             id=android:id/message
+${ESTOQUE_ALERTA}               id=android:id/alertTitle
 
 
 
 
 *** Keywords ***
-Dado que o usuário está na tela inicial do aplicativo
+Dado que o usuário acessou a tela inicial do aplicativo
     Element Should Be Visible    ${TELA_INICIAL} 
     Wait Until Element Is Visible    ${BARRA_MENU}
     Element Should Be Visible    ${BUTTON_MENU}
     Element Should Be Visible    ${BUTTON_NEW}
-Dado o usuário está na tela cadastro de produtos
+E o acessou a tela cadastro de produtos
     Espera o elemento e faz o click    ${BUTTON_NEW}
     Element Should Be Visible    ${TELA_CADASTRO}
     Page Should Contain Element    ${ELEMENTO_PRODUCT}
 
 Quando o usuario preencher os campos para cadastro
     [Arguments]    ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
-    #Espera o elemento e faz o click    ${BUTTON_NEW}
     Input Text    ${TXT_CODIGO}    ${codigo}
     Input Text    ${TXT_DESCRICAO}    ${descricao}
     Input Text    ${TXT_UNIDADE}    ${unidade}
@@ -96,17 +99,52 @@ Então o produto nao deve ser cadastrado
     Element Should Be Visible    ${TELA_CADASTRO}
     Element Should Be Visible    ${BUTTON_SAVE}
 
-E que existe um produto com 10 unidades em estoque
+Dado que existe um produto com 10 unidades em estoque
+    Dado que o usuário acessou a tela inicial do aplicativo
+    E o acessou a tela cadastro de produtos
     Quando o usuario preencher os campos para cadastro   001    Tora Maçaranduba    UN    10    100    1545
 Quando acrescentar 5 unidades ao estoque do produto
     Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
     Espera o elemento e faz o click   ${BUTTON_ADICIONAR}
-    Input Text    ${ESTOQUE_QUANTIDADE}     5
+    Wait Until Element Is Visible    ${TELA_ALTERAR_ESTOQUE}
+    Input Text    ${ESTOQUE_ENTRADA}     5
     Input Text    ${ESTOQUE_MOTIVO}         Entrada de estoque
     Input Text    ${ESTOQUE_REFERENCIA}     NF026-1
     Click Element    ${BUTTON_SAVE_ESTOQUE}
 
 Então o estoque do produto deve ser 15 unidades
     Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
-    Element Should Contain Text      ${ESTOQUE_QUANTIDADE}    15.0
-    Element Should Contain Text         //android.widget.TextView[@text='${ESTOQUE_QUANTIDADE}']     15.0
+    ${quantidade}    Get Text    ${TXT_QUANTIDADE}
+    Element Should Contain Text         //android.widget.TextView[@text='${quantidade}']    ${quantidade}
+    
+Quando decrementar 5 unidades ao estoque do produto
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_DECREMENTAR}
+    Wait Until Element Is Visible    ${TELA_ALTERAR_ESTOQUE}
+    Input Text    ${ESTOQUE_SAIDA}     5
+    Input Text    ${ESTOQUE_MOTIVO}         Saida de estoque
+    Input Text    ${ESTOQUE_REFERENCIA}     NF016-2
+    Click Element    ${BUTTON_SAVE_ESTOQUE}
+
+Então o estoque do produto deve ser 5 unidades   
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    ${quantidade}    Get Text    ${TXT_QUANTIDADE}
+    Element Should Contain Text         //android.widget.TextView[@text='${quantidade}']    ${quantidade}
+
+Quando decrementar 11 unidades ao estoque do produto
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_DECREMENTAR}
+    Wait Until Element Is Visible    ${TELA_ALTERAR_ESTOQUE}
+    Input Text    ${ESTOQUE_SAIDA}     11
+    Input Text    ${ESTOQUE_MOTIVO}         Saida de estoque
+    Input Text    ${ESTOQUE_REFERENCIA}     NF017-2
+    Click Element    ${BUTTON_SAVE_ESTOQUE}
+
+Então a operação deve falhar
+    Wait Until Element Is Visible    ${ESTOQUE_ALERTA}
+    Element Should Contain Text      ${ESTOQUE_MENSAGEM}    Insufficient stock
+
+Então o estoque do produto deve ser 10 unidades
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    ${quantidade}    Get Text    ${TXT_QUANTIDADE}
+    Element Should Contain Text         //android.widget.TextView[@text='${quantidade}']    ${quantidade}

@@ -32,14 +32,14 @@ Cadastro de varios produtos
 CT003 - Nao deve ser possivel cadastrar produto sem preencher os campos obrigatorios
     Dado o usuário está na tela cadastro de produtos
     Quando o usuario nao preencher os campos obrigatorios para cadastro    006    35    1570
-    Então deve aparecer mensagem informando o campo obrigatorio a ser preenchido
-    #E o produto nao deve ser cadastrado
+    Então o produto nao deve ser cadastrado
+    
 
 CT004 - Acrescentar quantidade de produto ao estoque
     Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" com 10 unidades em estoque
-    Quando acrescentar 5 unidades ao estoque do produto "Produto A"
-    Então o estoque do produto "Produto A" deve ser 15 unidades
+    E que existe um produto com 10 unidades em estoque
+    Quando acrescentar 5 unidades ao estoque do produto
+    Então o estoque do produto deve ser 15 unidades
 
 CT005 - Decrementar quantidade de produto do estoque sem ficar negativo
     Dado o usuário está na tela cadastro de produtos

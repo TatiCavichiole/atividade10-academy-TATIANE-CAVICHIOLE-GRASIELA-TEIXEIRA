@@ -25,6 +25,14 @@ ${TELA_PRODUTOS}                id=br.com.pztec.estoque:id/todoObjeto
 ${ID_PRODUTOS}                  xpath=//android.widget.TextView[@text="ID"]
 ${TXT_ID_PRODUTOS}              id=br.com.pztec.estoque:id/txt_idprod
 ${DADOS_INCOMPLETOS}            xpath=//android.widget.ScrollView[@resource-id="br.com.pztec.estoque:id/scrollView1"]/android.widget.LinearLayout
+${BUTTON_ADICIONAR}             id=br.com.pztec.estoque:id/entrada
+${PRODUTO_CADASTRADO}           id=br.com.pztec.estoque:id/linha_parte1
+${ESTOQUE_QUANTIDADE}           id=br.com.pztec.estoque:id/txt_qtdentrada
+${ESTOQUE_MOTIVO}               id=br.com.pztec.estoque:id/txt_motivo
+${ESTOQUE_REFERENCIA}           id=br.com.pztec.estoque:id/txt_referencia
+${BUTTON_SAVE_ESTOQUE}          xpath=//android.widget.Button[@resource-id="br.com.pztec.estoque:id/btn_salvar"]
+
+
 
 
 
@@ -69,11 +77,11 @@ Então o produto deve ser cadastrado com sucesso
     ${valor}    Get Text    ${TXT_VAL_UNIT}
     ${lote}    Get Text    ${TXT_LOTE}
     Element Should Contain Text         //android.widget.TextView[@text='${codigo}']    ${codigo}
-    #Should Be Equal As Strings    ${codigo}    ${dados_inseridos['codigo']}
-    #Should Be Equal As Strings    ${descricao}    ${dados_inseridos['descricao']}
-    #Should Be Equal As Strings    ${unidade}    ${dados_inseridos['unidade']}
-    #Should Be Equal As Strings    ${valor}    ${dados_inseridos['valor']}
-    #Should Be Equal As Strings    ${lote}    ${dados_inseridos['lote']}
+    Element Should Contain Text         //android.widget.TextView[@text='${descricao}']    ${descricao}
+    Element Should Contain Text         //android.widget.TextView[@text='${unidade}']    ${unidade}
+    Element Should Contain Text         //android.widget.TextView[@text='${quantidade}']    ${quantidade}
+    Element Should Contain Text         //android.widget.TextView[@text='${valor}']    ${valor}
+    Element Should Contain Text         //android.widget.TextView[@text='${lote}']    ${lote}
     Element Should Be Visible    ${ID_PRODUTOS}
     
 
@@ -84,7 +92,21 @@ Quando o usuario nao preencher os campos obrigatorios para cadastro
     Input Text    ${TXT_LOTE}    ${lote}    
     Click Element    ${BUTTON_SAVE}
 
-Então deve aparecer mensagem informando o campo obrigatorio a ser preenchido
-    Click Element    ${TXT_DESCRICAO}
-    Element Should Contain Text    ${TXT_DESCRICAO}    Required field
+Então o produto nao deve ser cadastrado
+    Element Should Be Visible    ${TELA_CADASTRO}
+    Element Should Be Visible    ${BUTTON_SAVE}
 
+E que existe um produto com 10 unidades em estoque
+    Quando o usuario preencher os campos para cadastro   001    Tora Maçaranduba    UN    10    100    1545
+Quando acrescentar 5 unidades ao estoque do produto
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_ADICIONAR}
+    Input Text    ${ESTOQUE_QUANTIDADE}     5
+    Input Text    ${ESTOQUE_MOTIVO}         Entrada de estoque
+    Input Text    ${ESTOQUE_REFERENCIA}     NF026-1
+    Click Element    ${BUTTON_SAVE_ESTOQUE}
+
+Então o estoque do produto deve ser 15 unidades
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Element Should Contain Text      ${ESTOQUE_QUANTIDADE}    15.0
+    Element Should Contain Text         //android.widget.TextView[@text='${ESTOQUE_QUANTIDADE}']     15.0

@@ -4,6 +4,8 @@ Resource            ../utils/config.robot
 Test Setup             Abrir App
 Test Teardown          Teardown
 
+*** Variables ***
+${dados_inseridos}         
 
 *** Test Cases ***
 
@@ -13,7 +15,7 @@ CT001 - Acessar as funcionalidades do App
 CT002 - Cadastro de produto com sucesso
     Dado o usuário está na tela cadastro de produtos
     Quando o usuario preencher os campos para cadastro   001    Tora Maçaranduba    UN    10    100    1545 
-    #Então o produto deve ser cadastrado com sucesso    ${dados_inseridos}
+    Então o produto deve ser cadastrado com sucesso      ${dados_inseridos}
 Cadastro de varios produtos
     
     [Template]    Quando o usuario preencher os campos para cadastro

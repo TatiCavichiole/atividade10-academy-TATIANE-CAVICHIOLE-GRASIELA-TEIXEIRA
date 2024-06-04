@@ -14,10 +14,10 @@ CT001 - Acessar as funcionalidades do App
 
 CT002 - Cadastro de produto com sucesso
     Dado que o usuário acessou a tela inicial do aplicativo
-    E o acessou a tela cadastro de produtos
+    E que acessou a tela cadastro de produtos
     Quando o usuario preencher os campos para cadastro   001    Tora Maçaranduba    UN    10    100    1545 
     Então o produto deve ser cadastrado com sucesso      ${dados_inseridos}
-Cadastro de varios produtos
+Quando Cadastrar varios produtos no App
     
     [Template]    Quando o usuario preencher os campos para cadastro
     FOR    ${counter}    IN RANGE    1
@@ -32,7 +32,7 @@ Cadastro de varios produtos
 
 CT003 - Nao deve ser possivel cadastrar produto sem preencher os campos obrigatorios
     Dado que o usuário acessou a tela inicial do aplicativo
-    E o acessou a tela cadastro de produtos
+    E que acessou a tela cadastro de produtos
     Quando o usuario nao preencher os campos obrigatorios para cadastro    006    35    1570
     Então o produto nao deve ser cadastrado
     
@@ -54,42 +54,36 @@ CT006 - Nao deve ser possivel que o estoque fique negativo
     Então o estoque do produto deve ser 10 unidades
 
 CT007 - Edição de informaçoes do Lot do produto
-    Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" com o Lot 1545
+    Dado que existe um produto cadastrado no estoque
     Quando editar o Lote do produto para 1745
-    Então o Lote do produto "Produto A" deve ser 1745
+    Então o Lote do produto deve ser 1745
 
 CT008 - Edição de informaçoes do Unit value do produto
-    Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" com o Unit value de 100.00
+    Dado que existe um produto cadastrado no estoque
     Quando editar o Unit value do produto para 150.00
-    Então o Unit value do produto "Produto A" deve ser 150.00
+    Então o Unit value do produto deve ser 150.00
 
 CT009 - Edição de informaçoes de description do produto
-    Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" com a description "Descrição antiga"
-    Quando editar a description do produto para "Descrição nova"
-    Então a description do produto "Produto A" deve ser "Descrição nova"
+    Dado que existe um produto cadastrado no estoque
+    Quando editar a description do produto para Jatoba Roxo
+    Então a description do produto deve ser Jatoba Roxo
 
 CT010 - Edição de informaçoes de Amount do produto
-   Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" com 10 Amount em estoque
+    Dado que existe um produto cadastrado no estoque
     Quando editar a Amount do produto para 20
-    Então a Amount do produto "Produto A" deve ser 20
+    Então a Amount do produto deve ser 20
 
 
 CT011 - Edição de informaçoes de Code do produto
-    Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" com Code 001
+    Dado que existe um produto cadastrado no estoque
     Quando editar o Code do produto para 002
-    Então o Codigo do produto "Produto A" deve ser 002
+    Então o Codigo do produto deve ser 002
 
 CT012 - Excluir um produto cadastrado
-    Dado o usuário está na tela cadastro de produtos
-    E que existe um produto "Produto A" no sistema
-    Quando excluir o produto "Produto A"
-    Então o produto "Produto A" não deve estar mais presente no sistema
+    Dado que existe um produto cadastrado no estoque
+    Quando excluir o produto
+    Então o produto não deve estar mais presente no sistema
 
 CT013 - Pesquisar produto cadastrado
-    Dado o usuário está na tela cadastro de produtos
+    Dado que o usuário acessou a tela inicial do aplicativo
     Então deve estar visivel o campo de pesquisa

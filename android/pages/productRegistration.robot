@@ -36,8 +36,19 @@ ${TELA_ALTERAR_ESTOQUE}         xpath=//android.widget.ScrollView[@resource-id="
 ${ESTOQUE_SAIDA}                id=br.com.pztec.estoque:id/txt_qtdsaida
 ${ESTOQUE_MENSAGEM}             id=android:id/message
 ${ESTOQUE_ALERTA}               id=android:id/alertTitle
-
-
+${ESTOQUE_BTN_OK}               id=android:id/button1
+${BUTTON_EDITAR}                id=br.com.pztec.estoque:id/editar
+${BUTTON_DELETAR}               id=br.com.pztec.estoque:id/deletar
+${TELA_PRODUTOS_VAZIA}          id=br.com.pztec.estoque:id/scrollView1
+${PESQUISA}                     id=android:id/search_button
+${BUTTON_BACKUP}                id=br.com.pztec.estoque:id/btn_backup
+${BUTTON_GERAR_BACKUP}          id=br.com.pztec.estoque:id/btn_gerar
+${BACKUP_MENSAGEM}              id=android:id/alertTitle
+${BACKUP_ARQUIVO}               id=br.com.pztec.estoque:id/datafile
+${BUTTON_RESTORE}               id=br.com.pztec.estoque:id/btn_restore
+${BUTTON_RESTORE_SELEC}         id=br.com.pztec.estoque:id/btn_procurar
+${RESTORE_ESTOQUE}              xpath=//android.widget.TextView[@resource-id="android:id/text1" and @text="Estoque"]
+${RESTORE_LISTA_BACKUP}         xpath=/hierarchy/android.widget.FrameLayout
 
 
 *** Keywords ***
@@ -46,13 +57,14 @@ Dado que o usuário acessou a tela inicial do aplicativo
     Wait Until Element Is Visible    ${BARRA_MENU}
     Element Should Be Visible    ${BUTTON_MENU}
     Element Should Be Visible    ${BUTTON_NEW}
-E o acessou a tela cadastro de produtos
+E que acessou a tela cadastro de produtos
     Espera o elemento e faz o click    ${BUTTON_NEW}
     Element Should Be Visible    ${TELA_CADASTRO}
     Page Should Contain Element    ${ELEMENTO_PRODUCT}
 
 Quando o usuario preencher os campos para cadastro
     [Arguments]    ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
+    Wait Until Element Is Visible   ${TELA_INICIAL}
     Input Text    ${TXT_CODIGO}    ${codigo}
     Input Text    ${TXT_DESCRICAO}    ${descricao}
     Input Text    ${TXT_UNIDADE}    ${unidade}
@@ -65,7 +77,7 @@ Quando o usuario preencher os campos para cadastro
     Click Element    ${BUTTON_SAVE}
 
 
-Cadastar varios produtos no App
+Quando Cadastrar varios produtos no App
     [Arguments]    ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
     
     Quando o usuario preencher os campos para cadastro ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
@@ -101,7 +113,7 @@ Então o produto nao deve ser cadastrado
 
 Dado que existe um produto com 10 unidades em estoque
     Dado que o usuário acessou a tela inicial do aplicativo
-    E o acessou a tela cadastro de produtos
+    E que acessou a tela cadastro de produtos
     Quando o usuario preencher os campos para cadastro   001    Tora Maçaranduba    UN    10    100    1545
 Quando acrescentar 5 unidades ao estoque do produto
     Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
@@ -143,8 +155,131 @@ Quando decrementar 11 unidades ao estoque do produto
 Então a operação deve falhar
     Wait Until Element Is Visible    ${ESTOQUE_ALERTA}
     Element Should Contain Text      ${ESTOQUE_MENSAGEM}    Insufficient stock
-
+    Click Element    ${ESTOQUE_BTN_OK}
+    Press Keycode    4
+    Press Keycode    4
 Então o estoque do produto deve ser 10 unidades
     Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
     ${quantidade}    Get Text    ${TXT_QUANTIDADE}
     Element Should Contain Text         //android.widget.TextView[@text='${quantidade}']    ${quantidade}
+
+Dado que existe um produto cadastrado no estoque
+    Dado que o usuário acessou a tela inicial do aplicativo
+    E que acessou a tela cadastro de produtos
+    Quando o usuario preencher os campos para cadastro   001    Tora Jatoba    UN    30    100    1545
+
+Quando editar o Lote do produto para 1745
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_EDITAR}
+    Clear Text   ${TXT_LOTE}
+    Input Text    ${TXT_LOTE}     1745
+    Click Element    ${BUTTON_SAVE}
+    
+Então o Lote do produto deve ser 1745
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    ${lote}    Get Text    ${TXT_LOTE}
+    Element Should Contain Text         //android.widget.TextView[@text='${lote}']    1745
+
+Quando editar o Unit value do produto para 150.00
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_EDITAR}
+    Clear Text   ${TXT_VAL_UNIT}
+    Input Text    ${TXT_VAL_UNIT}     150
+    Click Element    ${BUTTON_SAVE}
+
+Então o Unit value do produto deve ser 150.00
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    ${valunidade}    Get Text    ${TXT_VAL_UNIT}
+    Element Should Contain Text         //android.widget.TextView[@text='${valunidade}']    150,00
+
+Quando editar a description do produto para Jatoba Roxo
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_EDITAR}
+    Clear Text   ${TXT_DESCRICAO}
+    Input Text    ${TXT_DESCRICAO}     Jatoba Roxo
+    Click Element    ${BUTTON_SAVE}
+    
+Então a description do produto deve ser Jatoba Roxo
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    ${descricao}    Get Text    ${TXT_DESCRICAO}
+    Element Should Contain Text         //android.widget.TextView[@text='${descricao}']    Jatoba Roxo
+
+Quando editar a Amount do produto para 20
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_EDITAR}
+    Clear Text   ${TXT_QUANTIDADE}
+    Input Text    ${TXT_QUANTIDADE}     20
+    Click Element    ${BUTTON_SAVE}
+    
+Então a Amount do produto deve ser 20
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    ${quantidade}    Get Text    ${TXT_QUANTIDADE}
+    Element Should Contain Text         //android.widget.TextView[@text='${quantidade}']    20
+
+ Quando editar o Code do produto para 002
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_EDITAR}
+    Clear Text   ${TXT_CODIGO}
+    Input Text    ${TXT_CODIGO}     002
+    Click Element    ${BUTTON_SAVE}
+ 
+Então o Codigo do produto deve ser 002
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    ${codigo}    Get Text    ${TXT_CODIGO}
+    Element Should Contain Text         //android.widget.TextView[@text='${codigo}']    002
+
+Quando excluir o produto
+    Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
+    Espera o elemento e faz o click   ${BUTTON_DELETAR}
+    Element Should Contain Text      ${ESTOQUE_MENSAGEM}       Delete?
+    Click Element    ${ESTOQUE_BTN_OK}
+
+Então o produto não deve estar mais presente no sistema
+    Page Should Not Contain Element  ${PRODUTO_CADASTRADO}
+    
+Então deve estar visivel o campo de pesquisa
+    Wait Until Element Is Visible   ${PESQUISA}
+    Verifica se contem o text no content-desc   ${PESQUISA}    Search
+
+#Backup/Restore
+
+E que o usuário está na tela de backup
+    Wait Until Element Is Visible   ${BARRA_MENU}
+    Click Element   ${BUTTON_MENU}
+    Wait Until Element Is Visible   ${BUTTON_BACKUP}
+    Click Element   ${BUTTON_BACKUP}
+    Wait Until Element Is Visible    ${BUTTON_GERAR_BACKUP}
+    Element Should Contain Text    ${BUTTON_GERAR_BACKUP}    GENERATE BACKUP FILE
+
+
+Quando solicitar um backup das informações do sistema
+    Wait Until Element Is Visible   ${BUTTON_GERAR_BACKUP}
+    Click Element   ${BUTTON_GERAR_BACKUP}
+Então o usuario deve receber uma confirmação de concluído com sucesso
+    Wait Until Element Is Visible   ${BACKUP_MENSAGEM}
+    Element Should Contain Text      ${BACKUP_MENSAGEM}     Operation completed!
+    Click Element    ${ESTOQUE_BTN_OK}
+E um arquivo de backup contendo todas as informações do sistema deve ser gerado
+    Wait Until Element Is Visible   ${BACKUP_ARQUIVO}
+    Page Should Contain Element    ${BACKUP_ARQUIVO}
+  
+E que o usuário está na tela de restore
+    Wait Until Element Is Visible   ${BARRA_MENU}
+    Click Element   ${BUTTON_MENU}
+    Wait Until Element Is Visible   ${BUTTON_RESTORE}
+    Click Element   ${BUTTON_RESTORE}
+    Wait Until Element Is Visible    ${BUTTON_RESTORE_SELEC}
+    Element Should Contain Text    ${BUTTON_RESTORE_SELEC}    SELECT FILE
+
+Quando solicitar um restore das informações a partir do arquivo de backup
+    Click Element   ${BUTTON_RESTORE_SELEC}
+    Wait Until Element Is Visible   ${RESTORE_ESTOQUE}
+    Element Should Contain Text      ${RESTORE_ESTOQUE}     Estoque
+    Click Element    ${RESTORE_ESTOQUE}
+    
+    
+
+Então deve exibir lista de arquivos para restaurar a partir do backup
+    Wait Until Element Is Visible    ${RESTORE_LISTA_BACKUP}
+    Page Should Contain Element   ${RESTORE_LISTA_BACKUP}
+    

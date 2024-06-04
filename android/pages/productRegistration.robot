@@ -93,13 +93,14 @@ Dado que o usuário acessou a tela inicial do aplicativo
     Element Should Be Visible    ${BUTTON_MENU}
     Element Should Be Visible    ${BUTTON_NEW}
 E que acessou a tela cadastro de produtos
-    Espera o elemento e faz o click    ${BUTTON_NEW}
+    Wait Until Element Is Visible   ${BUTTON_NEW}
+    Click Element    ${BUTTON_NEW}
+    Wait Until Element Is Visible   ${TELA_CADASTRO}
     Element Should Be Visible    ${TELA_CADASTRO}
     Page Should Contain Element    ${ELEMENTO_PRODUCT}
 
 Quando o usuario preencher os campos para cadastro
     [Arguments]    ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
-    E que acessou a tela cadastro de produtos
     Wait Until Element Is Visible   ${TELA_INICIAL}
     Input Text    ${TXT_CODIGO}    ${codigo}
     Input Text    ${TXT_DESCRICAO}    ${descricao}
@@ -115,8 +116,18 @@ Quando o usuario preencher os campos para cadastro
 
 Quando Cadastrar varios produtos no App
     [Arguments]    ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
-    Sleep    1
-    Quando o usuario preencher os campos para cadastro ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
+    E que acessou a tela cadastro de produtos
+    Wait Until Element Is Visible   ${TELA_CADASTRO}
+    Input Text    ${TXT_CODIGO}    ${codigo}
+    Input Text    ${TXT_DESCRICAO}    ${descricao}
+    Input Text    ${TXT_UNIDADE}    ${unidade}
+    Input Text    ${TXT_QUANTIDADE}    ${quantidade}
+    Input Text    ${TXT_VAL_UNIT}    ${valor}
+    Input Text    ${TXT_LOTE}    ${lote}
+    ${dados_inseridos} =    Create Dictionary    codigo=${codigo}    descricao=${descricao}    unidade=${unidade}    quantidade=${quantidade}    valor=${valor}    lote=${lote}
+    [Return]    ${dados_inseridos}
+    Element Should Be Visible    ${EXP_DATE}
+    Click Element    ${BUTTON_SAVE}
     
 Então o produto deve ser cadastrado com sucesso
     [Arguments]    ${dados_inseridos}

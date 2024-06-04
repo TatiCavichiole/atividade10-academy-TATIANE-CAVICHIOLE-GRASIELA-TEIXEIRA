@@ -9,17 +9,15 @@ ${dados_inseridos}
 
 *** Test Cases ***
 
-CT001 - Acessar as funcionalidades do App
-    Dado que o usuário acessou a tela inicial do aplicativo
 
-CT002 - Cadastro de produto com sucesso
+CT001 - Cadastro de produto com sucesso
     Dado que o usuário acessou a tela inicial do aplicativo
     E que acessou a tela cadastro de produtos
     Quando o usuario preencher os campos para cadastro   001    Tora Maçaranduba    UN    10    100    1545 
     Então o produto deve ser cadastrado com sucesso      ${dados_inseridos}
-Quando Cadastrar varios produtos no App
+CT002 - Cadastro de varios produtos no App
     
-    [Template]    Quando o usuario preencher os campos para cadastro
+    [Template]    Quando Cadastrar varios produtos no App
     FOR    ${counter}    IN RANGE    1
         001    Tora Maçaranduba         UN    10    100    1545
         002    Tora Angelin             UN    15    100    1550

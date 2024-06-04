@@ -27,7 +27,6 @@ Quando Cadastrar varios produtos no App
         004    Tora Jarana              UN    25    100    1560
         005    Tora Orelha de Macado    UN    30    100    1565
 
-        
     END
 
 CT003 - Nao deve ser possivel cadastrar produto sem preencher os campos obrigatorios

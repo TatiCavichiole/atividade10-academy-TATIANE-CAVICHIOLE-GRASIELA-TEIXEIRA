@@ -34,7 +34,7 @@ ${BUTTON_SAVE_ESTOQUE}          xpath=//android.widget.Button[@resource-id="br.c
 ${BUTTON_DECREMENTAR}           id=br.com.pztec.estoque:id/saida
 ${TELA_ALTERAR_ESTOQUE}         xpath=//android.widget.ScrollView[@resource-id="br.com.pztec.estoque:id/scrollView1"]/android.widget.LinearLayout
 ${ESTOQUE_SAIDA}                id=br.com.pztec.estoque:id/txt_qtdsaida
-${ESTOQUE_MENSAGEM}             id=android:id/message
+${MENSAGEM}                     id=android:id/message
 ${ESTOQUE_ALERTA}               id=android:id/alertTitle
 ${ESTOQUE_BTN_OK}               id=android:id/button1
 ${BUTTON_EDITAR}                id=br.com.pztec.estoque:id/editar
@@ -49,6 +49,41 @@ ${BUTTON_RESTORE}               id=br.com.pztec.estoque:id/btn_restore
 ${BUTTON_RESTORE_SELEC}         id=br.com.pztec.estoque:id/btn_procurar
 ${RESTORE_ESTOQUE}              xpath=//android.widget.TextView[@resource-id="android:id/text1" and @text="Estoque"]
 ${RESTORE_LISTA_BACKUP}         xpath=/hierarchy/android.widget.FrameLayout
+${BUTTON_IMPORT}                id=br.com.pztec.estoque:id/btn_importar
+${OPCOES_IMPORT}                xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.LinearLayout/android.widget.LinearLayout[2]
+${BUTTON_PRODUCT_RESTORE}       id=br.com.pztec.estoque:id/btn_produtos
+${BUTTON_ENTRADAS_RESTORE}      id=br.com.pztec.estoque:id/btn_entradas
+${BUTTON_SAIDAS_RESTORE}        id=br.com.pztec.estoque:id/btn_saidas
+${BUTTON_GROUP_RESTORE}         id=br.com.pztec.estoque:id/btn_grupos
+${BUTTON_EXPORT}                id=br.com.pztec.estoque:id/btn_exportar
+${BUTTON_GERAR_EXPORT}          id=br.com.pztec.estoque:id/btn_gerar
+${MENSAGEM_OPCOMPLETA}          id=android:id/alertTitle
+${DOC_CSV}                      xpath=//android.widget.TextView[@resource-id="android:id/text1" and @text="group.csv"]
+${SELECIONAR_ARQUIVO}           xpath=//android.widget.TextView[@resource-id="android:id/alertTitle"]
+${BUTTON_REPORT}                id=br.com.pztec.estoque:id/btn_relatorios
+${TITULO_REPORT}                id=br.com.pztec.estoque:id/lbl_titulo
+${INVENTARIO_REPORT}            id=br.com.pztec.estoque:id/inventario
+${ENTRADA_REPORT}               id=br.com.pztec.estoque:id/relentrada
+${SAIDA_REPORT}                 id=br.com.pztec.estoque:id/relsaida
+${GERAR_REPORT_PDF}             id=br.com.pztec.estoque:id/btn_gerar
+${ABRIR_REPORT_PDF}             id=br.com.pztec.estoque:id/btn_abrir
+${DATA_INICIAL_REPORT}          id=br.com.pztec.estoque:id/data1
+${DATA_FINAL_REPORT}            id=br.com.pztec.estoque:id/data2
+${CALENDARIO_REPORT}            id=android:id/month_view
+${DATA_INI}                     xpath=//android.view.View[@content-desc="01 June 2024"]
+${DATA_FIN}                     xpath=//android.view.View[@content-desc="30 June 2024"]
+${EXIBINDO_TELA_PDF}            id=com.google.android.apps.docs:id/projector_toolbar
+${VIZUALIZA_PDF}                xpath=//android.view.ViewGroup[contains(@content-desc,"S")]
+${LISTA_COMPARTILHAR_PDF}       id=android:id/resolver_list
+${SETA_OPCOES_PDF}              xpath=//android.widget.ImageView[@content-desc="More options"]
+${COMPARTILHAR_PDF}             xpath=//android.widget.TextView[@resource-id="com.google.android.apps.docs:id/title" and @text="Send file…"]
+${DOWNLOAD_PDF}                 xpath=//android.widget.TextView[@resource-id="com.google.android.apps.docs:id/title" and @text="Download"]
+${PRINT_PDF}                    xpath=//android.widget.TextView[@resource-id="com.google.android.apps.docs:id/title" and @text="Print"]
+${FEEDBACK_PDF}                 xpath=//android.widget.TextView[@resource-id="com.google.android.apps.docs:id/title" and @text="Feedback to Google"]
+${COMPARTILHAR_DRIVER}          xpath=(//android.widget.ImageView[@resource-id="android:id/icon"])[1]
+${COMPARTILHAR_GMAIL}           xpath=(//android.widget.ImageView[@resource-id="android:id/icon"])[2]
+${COMPARTILHAR_BLUET}           xpath=(//android.widget.ImageView[@resource-id="android:id/icon"])[3]
+${COMPARTILHAR_MESAG}           xpath=(//android.widget.ImageView[@resource-id="android:id/icon"])[4]
 
 
 *** Keywords ***
@@ -64,6 +99,7 @@ E que acessou a tela cadastro de produtos
 
 Quando o usuario preencher os campos para cadastro
     [Arguments]    ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
+    E que acessou a tela cadastro de produtos
     Wait Until Element Is Visible   ${TELA_INICIAL}
     Input Text    ${TXT_CODIGO}    ${codigo}
     Input Text    ${TXT_DESCRICAO}    ${descricao}
@@ -79,7 +115,7 @@ Quando o usuario preencher os campos para cadastro
 
 Quando Cadastrar varios produtos no App
     [Arguments]    ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
-    
+    Sleep    1
     Quando o usuario preencher os campos para cadastro ${codigo}    ${descricao}    ${unidade}    ${quantidade}    ${valor}    ${lote}
     
 Então o produto deve ser cadastrado com sucesso
@@ -154,7 +190,7 @@ Quando decrementar 11 unidades ao estoque do produto
 
 Então a operação deve falhar
     Wait Until Element Is Visible    ${ESTOQUE_ALERTA}
-    Element Should Contain Text      ${ESTOQUE_MENSAGEM}    Insufficient stock
+    Element Should Contain Text      ${MENSAGEM}    Insufficient stock
     Click Element    ${ESTOQUE_BTN_OK}
     Press Keycode    4
     Press Keycode    4
@@ -231,7 +267,7 @@ Então o Codigo do produto deve ser 002
 Quando excluir o produto
     Wait Until Element Is Visible    ${PRODUTO_CADASTRADO}
     Espera o elemento e faz o click   ${BUTTON_DELETAR}
-    Element Should Contain Text      ${ESTOQUE_MENSAGEM}       Delete?
+    Element Should Contain Text      ${MENSAGEM}       Delete?
     Click Element    ${ESTOQUE_BTN_OK}
 
 Então o produto não deve estar mais presente no sistema
@@ -282,4 +318,127 @@ Quando solicitar um restore das informações a partir do arquivo de backup
 Então deve exibir lista de arquivos para restaurar a partir do backup
     Wait Until Element Is Visible    ${RESTORE_LISTA_BACKUP}
     Page Should Contain Element   ${RESTORE_LISTA_BACKUP}
-    
+
+Dado que o usuário acessou a tela de menu do aplicativo
+    Dado que o usuário acessou a tela inicial do aplicativo
+    Wait Until Element Is Visible   ${BARRA_MENU}
+    Click Element    ${BUTTON_MENU}
+
+Quando o usuário acessar a tela de import
+    Wait Until Element Is Visible   ${BUTTON_IMPORT}
+    Click Element    ${BUTTON_IMPORT}
+
+E visualizar as opções de importação do App
+    Wait Until Element Is Visible   ${OPCOES_IMPORT}
+    Element Should Be Visible    ${BUTTON_PRODUCT_RESTORE}
+    Element Should Contain Text    ${BUTTON_PRODUCT_RESTORE}    PRODUCT RESTORE
+    Element Should Be Visible    ${BUTTON_ENTRADAS_RESTORE}
+    Element Should Contain Text    ${BUTTON_ENTRADAS_RESTORE}    STOCK ENTRIES RESTORE
+    Element Should Be Visible    ${BUTTON_SAIDAS_RESTORE}
+    Element Should Contain Text    ${BUTTON_SAIDAS_RESTORE}    STOCK OUTS RESTORE
+    Element Should Be Visible    ${BUTTON_GROUP_RESTORE}
+    Element Should Contain Text    ${BUTTON_GROUP_RESTORE}    PRODUCT GROUP
+
+E que o usuário está na tela de export
+    Wait Until Element Is Visible   ${BUTTON_EXPORT}
+    Click Element    ${BUTTON_EXPORT}
+Quando solicitar a exportação dos registros de produtos
+    Wait Until Element Is Visible   ${BUTTON_GERAR_EXPORT}
+    Click Element    ${BUTTON_GERAR_EXPORT}
+Entao o usuario deve receber uma confirmação de concluído com sucesso
+    Wait Until Element Is Visible   ${MENSAGEM_OPCOMPLETA}
+    Element Should Contain Text      ${MENSAGEM_OPCOMPLETA}     Operation completed!
+    Click Element    ${ESTOQUE_BTN_OK}
+    Press Keycode    4
+    Press Keycode    4
+
+E selecionar a opção de restauração desejada
+    Wait Until Element Is Visible   ${OPCOES_IMPORT}
+    Click Element    ${BUTTON_PRODUCT_RESTORE}
+    Wait Until Element Is Visible   ${RESTORE_LISTA_BACKUP}
+    Click Element    ${RESTORE_ESTOQUE}
+  
+
+Entao deve exibir a lista de arquivos
+    Wait Until Element Is Visible   ${SELECIONAR_ARQUIVO}
+    Element Should Contain Text      ${SELECIONAR_ARQUIVO}     /storage/emulated/0/Estoque
+    Element Should Be Visible    ${DOC_CSV}
+    Click Element    ${DOC_CSV}
+
+Dado que o usuário está na tela de report
+   Dado que o usuário acessou a tela de menu do aplicativo
+   Wait Until Element Is Visible    ${BUTTON_REPORT}
+   Click Element    ${BUTTON_REPORT}
+   Wait Until Element Is Visible    ${TITULO_REPORT}
+   Element Should Be Visible    ${TITULO_REPORT}
+
+
+Então o sistema exibirá as 3 opções de report disponiveis
+    Wait Until Element Is Visible    ${TITULO_REPORT}
+    Element Should Be Visible    ${INVENTARIO_REPORT}
+    Element Should Contain Text      ${INVENTARIO_REPORT}     REPORT INVENTORY
+    Element Should Be Visible    ${ENTRADA_REPORT}
+    Element Should Contain Text      ${ENTRADA_REPORT}     STOCK ENTRIES
+    Element Should Be Visible    ${SAIDA_REPORT}
+    Element Should Contain Text      ${SAIDA_REPORT}     STOCK OUTS
+
+E acessou a opção de report desejada
+    Wait Until Element Is Visible    ${ENTRADA_REPORT}
+    Click Element     ${ENTRADA_REPORT}
+Quando selecionar a data inicial e final
+    Wait Until Element Is Visible    ${DATA_INICIAL_REPORT}
+    Click Element     ${DATA_INICIAL_REPORT}
+    Wait Until Element Is Visible    ${CALENDARIO_REPORT}
+    Click Element     ${DATA_INI}
+    Click Element    ${ESTOQUE_BTN_OK}
+    Wait Until Element Is Visible    ${DATA_FINAL_REPORT}
+    Click Element     ${DATA_FINAL_REPORT}
+    Wait Until Element Is Visible    ${CALENDARIO_REPORT}
+    Click Element     ${DATA_FIN}
+    Click Element    ${ESTOQUE_BTN_OK}
+    Wait Until Element Is Visible    ${GERAR_REPORT_PDF}
+    Click Element     ${GERAR_REPORT_PDF}
+    Wait Until Element Is Visible   ${BACKUP_ARQUIVO}
+
+E selecionar a função visualizar pdf
+    Wait Until Element Is Visible    ${ABRIR_REPORT_PDF}
+    Click Element    ${ABRIR_REPORT_PDF}
+Então o arquivo de report será gerado em pdf com o filtro selecionado
+    Wait Until Element Is Visible    ${EXIBINDO_TELA_PDF}
+    Element Should Be Visible    ${VIZUALIZA_PDF}
+
+Quando acessar a função visualizar pdf
+    Wait Until Element Is Visible    ${ABRIR_REPORT_PDF}
+    Click Element    ${ABRIR_REPORT_PDF}
+
+Então o sistema exibirá o arquivo e a opçoes de compartilhamento estarao disponíveis
+    Wait Until Element Is Visible    ${VIZUALIZA_PDF}
+    Click Element    ${SETA_OPCOES_PDF}
+    Wait Until Element Is Visible    ${COMPARTILHAR_PDF}
+    Click Element    ${COMPARTILHAR_PDF}
+    Wait Until Element Is Visible    ${LISTA_COMPARTILHAR_PDF}
+    Element Should Be Visible    ${COMPARTILHAR_GMAIL}
+    Element Should Be Visible    ${COMPARTILHAR_DRIVER}
+    Element Should Be Visible    ${COMPARTILHAR_BLUET}
+    Element Should Be Visible    ${COMPARTILHAR_MESAG}
+
+Quando não selecionar a data inicial e final
+    Wait Until Element Is Visible    ${DATA_INICIAL_REPORT}
+    Wait Until Element Is Visible    ${DATA_FINAL_REPORT}
+E concluir a operação
+    Wait Until Element Is Visible    ${GERAR_REPORT_PDF}
+    Click Element     ${GERAR_REPORT_PDF}
+
+Então o sistema exibirá o alerta
+    Wait Until Element Is Visible   ${MENSAGEM}
+    Element Should Contain Text      ${MENSAGEM}    Please select a date range.
+    Click Element    ${ESTOQUE_BTN_OK}
+
+Então o sistema exibirá o arquivo e as funçoes disponíveis
+    Wait Until Element Is Visible    ${VIZUALIZA_PDF}
+    Click Element    ${SETA_OPCOES_PDF}
+    Wait Until Element Is Visible    ${COMPARTILHAR_PDF}
+    Element Should Be Visible    ${COMPARTILHAR_PDF}
+    Element Should Be Visible    ${DOWNLOAD_PDF}
+    Element Should Be Visible    ${PRINT_PDF}
+    Element Should Be Visible    ${FEEDBACK_PDF}
